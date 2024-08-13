@@ -20,7 +20,7 @@ contract('Oracles', async (accounts) => {
   });
 
 
-  it('can register oracles', async () => {
+  it('1) can register oracles', async () => {
     
     // ARRANGE
     let fee = await config.flightSuretyApp.REGISTRATION_FEE.call();
@@ -33,7 +33,7 @@ contract('Oracles', async (accounts) => {
     }
   });
 
-  it('can request flight status', async () => {
+  it('2) can request flight status', async () => {
     
     // ARRANGE
     let flight = 'ND1309'; // Course number
@@ -56,19 +56,13 @@ contract('Oracles', async (accounts) => {
         try {
           // Submit a response...it will only be accepted if there is an Index match
           await config.flightSuretyApp.submitOracleResponse(oracleIndexes[idx], config.firstAirline, flight, timestamp, STATUS_CODE_ON_TIME, { from: accounts[a] });
-
         }
         catch(e) {
           // Enable this when debugging
            console.log('\nError', idx, oracleIndexes[idx].toNumber(), flight, timestamp);
         }
-
       }
     }
-
-
   });
-
-
- 
+  
 });
