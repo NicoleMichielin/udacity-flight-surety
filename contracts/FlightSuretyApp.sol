@@ -1,10 +1,12 @@
-pragma solidity ^0.4.25;
+//SPDX-License-Identifier: MIT
+pragma solidity >=0.8.19;
 
 // It's important to avoid vulnerabilities due to numeric overflow bugs
 // OpenZeppelin's SafeMath library, when used correctly, protects agains such bugs
 // More info: https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2018/november/smart-contract-insecurity-bad-arithmetic/
 
-import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "../contracts/FlightSuretyData.sol";
 
 /************************************************** */
 /* FlightSurety Smart Contract                      */

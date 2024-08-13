@@ -1,6 +1,8 @@
-pragma solidity ^0.4.25;
+//SPDX-License-Identifier: MIT
+pragma solidity >=0.8.19;
 
-import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract FlightSuretyData {
     using SafeMath for uint256;
@@ -174,11 +176,12 @@ contract FlightSuretyData {
     * @dev Fallback function for funding smart contract.
     *
     */
-    function() 
-                            external 
-                            payable 
-    {
-        fund();
+    fallback() external payable {
+
+    }
+
+    receive() external payable {
+
     }
 
 
