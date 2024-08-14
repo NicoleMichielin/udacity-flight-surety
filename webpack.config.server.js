@@ -5,7 +5,7 @@ const StartServerPlugin = require('start-server-webpack-plugin')
 
 module.exports = {
     entry: [
-        'webpack/hot/poll?1000',
+        //'webpack/hot/poll?1000',
         './src/server/index'
     ],
     watch: true,
@@ -29,6 +29,9 @@ module.exports = {
             "process.env": {
                 "BUILD_TARGET": JSON.stringify('server')
             }
+        }),
+        new RunScriptWebpackPlugin({
+            name: 'server.js',
         }),
     ],
     output: {

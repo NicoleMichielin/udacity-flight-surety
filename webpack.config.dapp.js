@@ -43,5 +43,9 @@ module.exports = {
     contentBase: path.join(__dirname, "dapp"),
     port: 8000,
     stats: "minimal"
+  },
+  devtool: 'inline-source-map',
+  performance: {
+    hints: false,
   }
 };
