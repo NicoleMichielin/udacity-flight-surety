@@ -6,7 +6,7 @@ contract('Oracles', async (accounts) => {
 
   const TEST_ORACLES_COUNT = 20;
   var config;
-  before('setup contract', async () => {
+  /*before('setup contract', async () => {
     config = await Test.Config(accounts);
 
     // Watch contract events
@@ -17,7 +17,7 @@ contract('Oracles', async (accounts) => {
     const STATUS_CODE_LATE_TECHNICAL = 40;
     const STATUS_CODE_LATE_OTHER = 50;
 
-  });
+  });*/
 
 
   it('1) can register oracles', async () => {
