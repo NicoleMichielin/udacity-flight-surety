@@ -62,7 +62,7 @@ contract FlightSuretyApp {
     */
     modifier requireIsOperational() {
          // Modify to call data contract's status
-        require(true, "Contract is currently not operational");  
+        require(flightSuretyData.isOperational(), "Contract is currently not operational");  
         _;  // All modifiers require an "_" which indicates where the function body will be added
     }
 
@@ -91,8 +91,8 @@ contract FlightSuretyApp {
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
 
-    function isOperational() public pure returns(bool) {
-        return true;  // Modify to call data contract's status
+    function isOperational() public view returns(bool) {
+        return flightSuretyData.isOperational();  // Modify to call data contract's status
     }
 
     function getFlightID(string memory _flightName) pure internal returns(bytes32) {
@@ -194,14 +194,14 @@ contract FlightSuretyApp {
 
     }*/
 
-    /*function buyInsuranceApp(string calldata flightName) external payable {
+    function buyInsuranceApp(string calldata flightName) external payable {
         bytes32 _flightID = getFlightID(flightName);
         require(flights[_flightID].isRegistered,"Flight not yet registered");
         uint256 alreadyPaidIn = flightSuretyData.getPayOutAmount(msg.sender, flightName);
         uint256 addPayOut = msg.value.mul(payOutMultiple).div(100);
         require(alreadyPaidIn.add(addPayOut) <= maxInsurancePayOut, "Additional insurance leads to overinsurance");
         flightSuretyData.buyInsurance{value: msg.value}(msg.sender, _flightID, addPayOut);
-    }*/
+    }
     
     function withdrawApp() public requireIsOperational{
         flightSuretyData.withdraw(msg.sender);
@@ -314,19 +314,24 @@ contract FlightSuretyApp {
         return keccak256(abi.encodePacked(airline, flight, timestamp));
     }
 
+    //helper function for gnerating non-duplicatied index
+    function generateIndex(address account) private view returns(uint8) {
+        return uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, account))) % 10);
+    }
+
     // Returns array of three non-duplicating integers from 0-9
-    function generateIndexes (address account) internal returns(uint8[3] memory) {
+    function generateIndexes(address account) internal view returns(uint8[3] memory) {
         uint8[3] memory indexes;
-        indexes[0] = getRandomIndex(account);
-        
-        indexes[1] = indexes[0];
+        indexes[0] = generateIndex(account);
+
+        indexes[1] = generateIndex(account);
         while(indexes[1] == indexes[0]) {
-            indexes[1] = getRandomIndex(account);
+            indexes[1] = generateIndex(account);
         }
 
-        indexes[2] = indexes[1];
+        indexes[2] = generateIndex(account);
         while((indexes[2] == indexes[0]) || (indexes[2] == indexes[1])) {
-            indexes[2] = getRandomIndex(account);
+            indexes[2] = generateIndex(account);
         }
 
         return indexes;

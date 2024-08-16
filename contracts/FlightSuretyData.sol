@@ -459,10 +459,9 @@ contract FlightSuretyData {
         // Airline must be registered first
         require(airlines[airline].ID != 0, "No data for this airline yet. Please register airline first.");
         // Avoid double funding
-        require(airlines[airline].isFunded=true,"airline is already fully funded.");
+        require(airlines[airline].isFunded == true,"airline is already fully funded.");
         
-        airlines[airline].isFunded = true;
-        
+        airlines[airline].isFunded == true;
 
     }
 
