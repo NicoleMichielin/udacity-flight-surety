@@ -8,7 +8,9 @@ module.exports = {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 9545,            // Standard Ethereum port (default: none)
       network_id: "5777",    // Ganache network id
-      websockets: true
+      websockets: true,
+      gas: 6721975,
+      gasPrice: 20000000000
     },
 
     sepolia: {

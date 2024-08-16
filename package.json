@@ -14,13 +14,17 @@
   },
   "author": "",
   "dependencies": {
+    "@types/node": "^22.3.0",
     "express": "^4.18.2",
+    "http": "^0.0.1-security",
     "solc": "^0.8.19",
     "util": "^0.12.5",
     "web3": "^1.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.7",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
     "@openzeppelin/contracts": "^4.8.1",
     "@truffle/hdwallet-provider": "^2.1.7",
