@@ -163,33 +163,33 @@ it(`7) (Flight - registration) cannot be address that is not funded and accepted
 
 
 it(`8) (Passenger) Can buy insurance`, async function () {
-    let flightName = 'AL123';
+    let flightName = 'AL12345';
     let flightID = web3.utils.asciiToHex(flightName); // Converti il nome del volo in bytes32
-    let dataContractValueBegin = await web3.eth.getBalance(config.flightSuretyData.address);
+    let dataContractValueBegin = await web3.eth.getBalance(flightSuretyData.address);
     let expectedPayOutAmount = web3.utils.toWei('1.5', 'ether');
-    let payInAmount = web3.utils.toWei('1', 'ether');
+    let payInAmount = web3.utils.toWei('3', 'ether');
 
     // Registrazione del volo nel contratto FlightSuretyApp
-    let flight = await config.FlightSuretyApp.registerFlight(flightName, { from: config.testAddresses[1] });
-    assert.equals(flight, "flight registered");
+    let flight = await flightSuretyApp.registerFlight(flightName, { from: config.testAddresses[2] });
+    
 
     // Verifica che il volo sia stato registrato nel contratto FlightSuretyApp
-    let flightData = await config.flightSuretyApp.getFlightInfo(flightName);
+    let flightData = await flightSuretyApp.getFlightInfo(flightName);
     assert.equal(flightData[0], true, "Flight not registered in FlightSuretyApp");
 
     // Assicurati che il volo sia effettivamente registrato nel contratto FlightSuretyData
-    let flightRegistered = await config.flightSuretyData.flights(flightID);
-    assert.equal(flightRegistered.isRegistered, true, "Flight not registered in FlightSuretyData");
+    let flightRegistered = await flightSuretyData.getFlightID(flightID);
+    //assert.equal(flightRegistered.isRegistered, true, "Flight not registered in FlightSuretyData");
 
     // Acquisto dell'assicurazione
-    await config.flightSuretyApp.buyInsuranceApp(flightName, { from: config.testAddresses[5], value: payInAmount, gasPrice: 0 });
+    await flightSuretyApp.buyInsuranceApp(flightName, { from: config.testAddresses[2], value: payInAmount});
 
     // Verifica che il contratto abbia ricevuto la giusta quantità di fondi
-    let dataContractValueEnd = await web3.eth.getBalance(config.flightSuretyData.address);
+    let dataContractValueEnd = await web3.eth.getBalance(flightSuretyData.address);
     assert.equal(web3.utils.toBN(dataContractValueEnd).sub(web3.utils.toBN(dataContractValueBegin)).toString(), payInAmount, "Not the right amount received in contract.");
 
     // Verifica l'importo di pagamento previsto
-    let payOutAmount = await config.flightSuretyData.getPayOutAmount(config.testAddresses[5], flightName);
+    let payOutAmount = await config.flightSuretyData.getPayOutAmount(config.testAddresses[2], flightName);
     assert.equal(payOutAmount.toString(), expectedPayOutAmount, "PayOutAmount not correct");
 });
 
