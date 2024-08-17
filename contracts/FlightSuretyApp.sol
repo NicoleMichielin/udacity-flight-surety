@@ -42,7 +42,7 @@ contract FlightSuretyApp {
 
     uint256 airlineFundingRequirement = 10000000000000000000;
     uint256 payOutMultiple = 150;
-    uint256 maxInsurancePayOut = payOutMultiple.mul(1000000000000000000).div(100); //max 1 ETH insurance per flight
+    uint256 maxInsurancePayOut = payOutMultiple.mul(3000000000000000000).div(100); //max 1 ETH insurance per flight
 
     event FlightProcessed(string _flight, uint8 statusCode);
     event OracleRegistered(address oracleAddress);

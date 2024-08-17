@@ -260,7 +260,7 @@ contract FlightSuretyData {
     }
 
     }
-    function getFlightID(string memory _flightName) pure internal returns(bytes32) {
+    function getFlightID(string memory _flightName) pure public returns(bytes32) {
         return keccak256(abi.encodePacked(_flightName));
     }
 
