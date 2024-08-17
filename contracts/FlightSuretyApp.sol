@@ -195,13 +195,20 @@ contract FlightSuretyApp {
     }*/
 
     function buyInsuranceApp(string calldata flightName) external payable {
-        bytes32 _flightID = getFlightID(flightName);
-        require(flights[_flightID].isRegistered,"Flight not yet registered");
-        uint256 alreadyPaidIn = flightSuretyData.getPayOutAmount(msg.sender, flightName);
-        uint256 addPayOut = msg.value.mul(payOutMultiple).div(100);
-        require(alreadyPaidIn.add(addPayOut) <= maxInsurancePayOut, "Additional insurance leads to overinsurance");
-        flightSuretyData.buyInsurance{value: msg.value}(msg.sender, _flightID, addPayOut);
-    }
+    bytes32 _flightID = getFlightID(flightName);
+    
+    // Verifica se il volo è registrato in FlightSuretyApp
+    require(flights[_flightID].isRegistered, "Flight not yet registered");
+    
+    uint256 alreadyPaidIn = flightSuretyData.getPayOutAmount(msg.sender, flightName);
+    uint256 addPayOut = msg.value.mul(payOutMultiple).div(100);
+    
+    require(alreadyPaidIn.add(addPayOut) <= maxInsurancePayOut, "Additional insurance leads to overinsurance");
+    
+    // Acquista l'assicurazione passando i dati al contratto FlightSuretyData
+    flightSuretyData.buyInsurance{value: msg.value}(msg.sender, _flightID, addPayOut);
+}
+  
     
     function withdrawApp() public requireIsOperational{
         flightSuretyData.withdraw(msg.sender);

@@ -184,19 +184,29 @@ contract FlightSuretyData {
     /*                                 REFERENCE DATA APP CONTRACT  FUNCTIONS                   */
     /********************************************************************************************/
      
-    function authorizeCaller(address appContract) 
+    /*function authorizeCaller(address appContract) 
                                                     public 
                                                     requireContractOwner 
     {
         require(authorizedContracts[appContract] != true, "Caller is already authorized");
         authorizedContracts[appContract] = true;
-    } 
+    } */
 
     function deauthorizeCaller(address appContract) 
                                                     public 
                                                     requireContractOwner {
         delete authorizedContracts[appContract];
     } 
+
+    function isAuthorized(address caller) external view returns (bool) {
+        return authorizedContracts[caller];
+    }
+
+    function authorizeContract(address _contract) external {
+        require(!authorizedContracts[_contract], "Contract is already authorized");
+        authorizedContracts[_contract] = true;
+    }
+
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -361,25 +371,11 @@ contract FlightSuretyData {
     * @dev Buy insurance for a flight
     *
     */   
-    function buyInsurance
-                            (         
-                                address passengerAddress,
-                                bytes32 flightID,
-                                uint256 addPayOutAmount
-
-                            )
-                            external
-                            payable
-                            requireCallerAuthorized
-                            requireIsOperational
-    {
-        //passengers[passengerAddress].insurances[flightID].paidIn = msg.value;
-        uint256 beginPayOutAmount = passengers[passengerAddress].payOutAmount[flightID];
-        passengers[passengerAddress].payOutAmount[flightID] = beginPayOutAmount.add(addPayOutAmount);
-        // if (insureesPerFlight[flightID].length=0) {
-        //     insureesPerFlight.push(flightID);
-        // }
-        insureesPerFlight[flightID].push(passengerAddress);  
+    function buyInsurance(address passenger, bytes32 flightID, uint256 payOutAmount) external payable {
+        require(msg.value > 0, "Insurance amount must be greater than 0");
+        require(passengers[passenger].payOutAmount[flightID] == 0, "Insurance already purchased for this flight");
+        require(msg.value == payOutAmount, "Insurance amount does not match the sent value");
+        passengers[passenger].payOutAmount[flightID] = payOutAmount;
     }
 
     /**
